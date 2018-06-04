@@ -1,17 +1,18 @@
 #!/usr/bin/env chicken-scheme
 (use test)
 
-(define (fringe list)
-  (let iter ((list list)
+(define (fringe tree)
+  (let iter ((tree tree)
              (leaves '()))
-    (if (null? list)
+    (if (null? tree)
         leaves
-        (let ((first (car list)))
-          (iter (cdr list)
-                (if (pair? first)
-                    (append (fringe first) leaves)
-                    (cons first leaves)))))))
+        (let ((first (car tree)))
+          (iter (cdr tree)
+                (append leaves 
+                        (if (pair? first) 
+                          (fringe first)
+                          (list first))))))))
 
 (define x '((1 2) (3 4)))
-(test '(4 3 2 1) (fringe x))
-(test '(4 3 2 1 4 3 2 1) (fringe (list x x)))
+(test '(1 2 3 4) (fringe x))
+(test '(1 2 3 4 1 2 3 4) (fringe (list x x)))
